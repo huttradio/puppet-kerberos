@@ -35,24 +35,25 @@
 #
 # Copyright 2014 Your name here, unless otherwise noted.
 #
-class kerberos::client::conf::logging
+define kerberos::client::conf::capath::realm
 (
-  $ensure = 'present',
+  $subsection,
+  $realm = $name,
 
-  $kdc          = undef,
-  $admin_server = undef,
-  $default      = undef,
+  $ensure = 'present',
 
   $client_conf_file = $::kerberos::client::conf::file,
 )
 {
+  validate_hash($subsection)
+
   if ($ensure == 'present')
   {
     concat::fragment
-    { "${client_conf_file}::logging":
+    { "${client_conf_file}::capaths::${realm}":
       target  => $client_conf_file,
-      order   => '05',
-      content => template('kerberos/client/conf/logging.erb'),
+      order   => "05-${realm}",
+      content => template('kerberos/client/conf/capath/realm.erb'),
     }
   }
 }

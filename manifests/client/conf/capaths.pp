@@ -47,7 +47,7 @@ class kerberos::client::conf::capaths
     concat::fragment
     { "${client_conf_file}::capaths":
       target  => $client_conf_file,
-      order   => '06',
+      order   => '05',
       content => '\n[capaths]\n',
     }
   }

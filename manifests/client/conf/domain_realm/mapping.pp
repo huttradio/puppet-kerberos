@@ -35,45 +35,20 @@
 #
 # Copyright 2014 Your name here, unless otherwise noted.
 #
-define kerberos::client::plugin
+define kerberos::client::conf::domain_realm::mapping
 (
-	$subsection,
-	$tag		= $title,
+	$realm,
+  $domain = $name,
 
-	$krb5_conf	= undef
+  $ensure = 'present',
+
+  $client_conf_file = $::kerberos::client::conf::file,
 )
 {
-	require kerberos::params
-
-	# Fail if kerberos::client is not defined.
-	if (!defined(Class["kerberos::client"]))
-	{
-		fail("kerberos::client is not defined")
-	}
-
-	if ($krb5_conf == undef)
-	{
-		$krb5_conf_real = $kerberos::params::krb5_conf
-	}
-	else
-	{
-		$krb5_conf_real = $krb5_conf
-	}
-
-	if (!defined(Class["kerberos::client::plugins"]))
-	{
-		class
-		{ "kerberos::client::plugins":
-			krb5_conf	=> $krb5_conf_real,
-		}
-	}
-
-	validate_hash($subsection)
-
-	concat::fragment
-	{ "$krb5_conf_real.plugins.$tag":
-		target	=> $krb5_conf_real,
-		order	=> "12-$tag",
-		content	=> template("kerberos/krb5.conf.plugin.erb"),
-	}
+  concat::fragment
+  { "${client_conf_file}::domain_realm::${domain}":
+    target  => $client_conf_file,
+    order   => "03-${domain}",
+    content => "${domain} = ${realm}\n",
+  }
 }

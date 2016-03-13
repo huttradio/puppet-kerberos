@@ -47,7 +47,7 @@ class kerberos::client::conf::appdefaults
     concat::fragment
     { "${client_conf_file}::appdefaults":
       target  => $client_conf_file,
-      order   => '07',
+      order   => '06',
       content => '\n[appdefaults]\n',
     }
   }

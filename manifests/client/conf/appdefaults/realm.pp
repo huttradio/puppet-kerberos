@@ -38,7 +38,7 @@
 define kerberos::client::conf::appdefaults::realm
 (
   $subsection,
-  $realm = $title,
+  $realm = $name,
 
   $ensure = 'present',
 
@@ -50,9 +50,9 @@ define kerberos::client::conf::appdefaults::realm
   if ($ensure == 'present')
   {
     concat::fragment
-    { "${client_conf_file}::appdefaults::${tag}":
-      target  => $krb5_conf_real,
-      order   => "07-${realm}",
+    { "${client_conf_file}::appdefaults::${realm}":
+      target  => $client_conf_file,
+      order   => "06-${realm}",
       content => template('kerberos/client/conf/appdefaults/realm.erb'),
     }
   }

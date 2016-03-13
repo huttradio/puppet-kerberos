@@ -35,20 +35,24 @@
 #
 # Copyright 2014 Your name here, unless otherwise noted.
 #
-class kerberos::client::conf::dbmodules
+define kerberos::client::conf::plugins::name
 (
+  $subsection,
+
   $ensure = 'present',
 
   $client_conf_file = $::kerberos::client::conf::file,
 )
 {
+  validate_hash($subsection)
+
   if ($ensure == 'present')
   {
     concat::fragment
-    { "${client_conf_file}::dbmodules":
+    { "${client_conf_file}::plugins::${name}":
       target  => $client_conf_file,
-      order   => '11',
-      content => '\n[dbmodules]\n',
+      order   => "07-${name}",
+      content => template('kerberos/client/conf/plugins/name.erb'),
     }
   }
 }

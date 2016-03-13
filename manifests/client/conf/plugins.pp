@@ -51,7 +51,7 @@ class kerberos::client::conf::plugins
     concat::fragment
     { "${client_conf_file}::plugins":
       target  => $client_conf_file,
-      order   => '09',
+      order   => '07',
       content => '\n[plugins]\n',
     }
   }

@@ -1,0 +1,5 @@
+<%= @realm %> = {
+<% @subsection.each_pair do |key, value| -%>
+	<%= key %> = <%= value %>
+<% end -%>
+}
