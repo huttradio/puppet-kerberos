@@ -1,0 +1,17 @@
+<%= @name %> = {
+<% if @server -%>
+	server = <%= @server %>
+<% end -%>
+<% if @secret -%>
+	secret = <%= @secret %>
+<% end -%>
+<% if @timeout -%>
+	timeout = <%= @timeout %>
+<% end -%>
+<% if @retries -%>
+	retries = <%= @retries %>
+<% end -%>
+<% if @strip_realm -%>
+	strip_realm = <%= @strip_realm %>
+<% end -%>
+}

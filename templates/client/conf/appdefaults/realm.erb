@@ -1,0 +1,15 @@
+<%= @realm %> = {
+<% @subsection.each_pair do |key, value| -%>
+<% if value.is_a?(Hash) -%>
+	<%= key %> = {
+<% value.each_pair do |k, v| -%>
+<% Array(v).each do |av| %>
+		<%= k %> = <%= av %>
+<% end -%>
+<% end -%>
+	}
+<% else -%>
+	<%= key %> = <%= value %>
+<% end -%>
+<% end -%>
+}

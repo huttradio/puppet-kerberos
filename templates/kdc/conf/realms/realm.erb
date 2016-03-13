@@ -1,0 +1,92 @@
+<%= @realm %> = {
+<% if @acl_file -%>
+	acl_file = <%= @acl_file %>
+<% end -%>
+<% if @admin_keytab -%>
+	admin_keytab = <%= @admin_keytab %>
+<% end -%>
+<% if @database_module -%>
+	database_module = <%= @database_module %>
+<% end -%>
+<% if @database_name -%>
+	database_name = <%= @database_name %>
+<% end -%>
+<% if @default_principal_expiration -%>
+	default_principal_expiration = <%= @default_principal_expiration %>
+<% end -%>
+<% if @default_principal_flags -%>
+	default_principal_flags = <%= Array(@default_principal_flags).join(",") %>
+<% end -%>
+<% if @dict_file -%>
+	dict_file = <%= @dict_file %>
+<% end -%>
+<% if @host_based_services -%>
+	host_based_services = <%= Array(@host_based_services).join(",") %>
+<% end -%>
+<% if @iprop_enable -%>
+	iprop_enable = <%= @iprop_enable %>
+<% end -%>
+<% if @iprop_master_ulogsize -%>
+	iprop_master_ulogsize = <%= @iprop_master_ulogsize %>
+<% end -%>
+<% if @iprop_slave_poll -%>
+	iprop_slave_poll = <%= @iprop_slave_poll %>
+<% end -%>
+<% if @iprop_port -%>
+	iprop_port = <%= @iprop_port %>
+<% end -%>
+<% if @iprop_resync_timeout -%>
+	iprop_resync_timeout = <%= @iprop_resync_timeout %>
+<% end -%>
+<% if @iprop_logfile -%>
+	iprop_logfile = <%= @iprop_logfile %>
+<% end -%>
+<% if @kadmind_port -%>
+	kadmind_port = <%= @kadmind_port %>
+<% end -%>
+<% if @key_stash_file -%>
+	key_stash_file = <%= @key_stash_file %>
+<% end -%>
+<% if @kdc_ports -%>
+	kdc_ports = <%= Array(@kdc_ports).join(",") %>
+<% end -%>
+<% if @kdc_tcp_ports -%>
+	kdc_tcp_ports = <%= Array(@kdc_tcp_ports).join(",") %>
+<% end -%>
+<% if @master_key_name -%>
+	master_key_name = <%= @master_key_name %>
+<% end -%>
+<% if @master_key_type -%>
+	master_key_type = <%= @master_key_type %>
+<% end -%>
+<% if @max_life -%>
+	max_life = <%= @max_life %>
+<% end -%>
+<% if @max_renewable_life -%>
+	max_renewable_life = <%= @max_renewable_life %>
+<% end -%>
+<% if @no_host_referral -%>
+	no_host_referral = <%= Array(@no_host_referral).join(",") %>
+<% end -%>
+<% if @des_crc_session_supported -%>
+	des_crc_session_supported = <%= @des_crc_session_supported %>
+<% end -%>
+<% if @reject_bad_transit -%>
+	reject_bad_transit = <%= @reject_bad_transit %>
+<% end -%>
+<% if @restrict_anonymous_to_tgt -%>
+	restrict_anonymous_to_tgt = <%= @restrict_anonymous_to_tgt %>
+<% end -%>
+<% if @supported_enctypes -%>
+	supported_enctypes = <%= Array(@supported_enctypes).join(",") %>
+<% end -%>
+<% if @sunw_dbprop_enable -%>
+	sunw_dbprop_enable = <%= @sunw_dbprop_enable %>
+<% end -%>
+<% if @sunw_dbprop_master_ulogsize -%>
+	sunw_dbprop_master_ulogsize = <%= @sunw_dbprop_master_ulogsize %>
+<% end -%>
+<% if @sunw_dbprop_slave_poll -%>
+	sunw_dbprop_slave_poll = <%= @sunw_dbprop_slave_poll %>
+<% end -%>
+}
