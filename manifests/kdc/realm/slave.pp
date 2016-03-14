@@ -50,6 +50,7 @@ define kerberos::kdc::realm::slave
   $ensure = 'present',
 
   $manage_realm     = true,
+  $domain           = undef,
   $realm_parameters = {},
 
   $manage_kpropd_acl_realm       = true,
@@ -61,6 +62,7 @@ define kerberos::kdc::realm::slave
     create_resources('::kerberos::kdc::realm', $realm, merge(
     {
       'ensure' => $ensure,
+      'domain' => $domain,
     }, $realm_parameters)
   }
 

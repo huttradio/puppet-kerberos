@@ -49,6 +49,7 @@ define kerberos::kdc::realm::master
   $master = $::fqdn,
 
   $manage_realm     = true,
+  $domain           = undef,
   $realm_parameters = {},
 
   $manage_kiprop_principal = true,
@@ -67,6 +68,7 @@ define kerberos::kdc::realm::master
     create_resources('::kerberos::kdc::realm', $realm, merge(
     {
       'ensure' => $ensure,
+      'domain' => $domain,
     }, $realm_parameters)
   }
 

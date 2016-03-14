@@ -49,6 +49,6 @@ define kerberos::client::conf::domain_realm::mapping
   { "${client_conf_file}::domain_realm::${domain}":
     target  => $client_conf_file,
     order   => "03-${domain}",
-    content => "${domain} = ${realm}\n",
+    content => ".${domain} = ${realm}\n",
   }
 }
