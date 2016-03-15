@@ -45,8 +45,10 @@
 define kerberos::kdc::realm::slave
 (
   $master,
-  $slave  = $::fqdn,
-  $realm  = $title,
+  $password,
+  $slave = $::fqdn,
+  $realm = $title,
+
   $ensure = 'present',
 
   $manage_realm     = true,
@@ -61,8 +63,9 @@ define kerberos::kdc::realm::slave
   {
     create_resources('::kerberos::kdc::realm', { $realm => merge(
     {
-      'ensure' => $ensure,
-      'domain' => $domain,
+      'ensure'   => $ensure,
+      'domain'   => $domain,
+      'password' => $password,
     }, $realm_parameters) })
   }
 

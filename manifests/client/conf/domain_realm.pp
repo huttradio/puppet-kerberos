@@ -48,7 +48,7 @@ class kerberos::client::conf::domain_realm
     { "${client_conf_file}::domain_realm":
       target  => $client_conf_file,
       order   => '04',
-      content => '\n[domain_realm]\n',
+      content => "\n[domain_realm]\n",
     }
   }
 }

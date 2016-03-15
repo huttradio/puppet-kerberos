@@ -44,9 +44,11 @@
 #
 define kerberos::kdc::realm::master
 (
-  $ensure = 'present',
+  $password,
   $realm  = $title,
   $master = $::fqdn,
+
+  $ensure = 'present',
 
   $manage_realm     = true,
   $domain           = undef,
@@ -67,8 +69,9 @@ define kerberos::kdc::realm::master
   {
     create_resources('::kerberos::kdc::realm', { $realm => merge(
     {
-      'ensure' => $ensure,
-      'domain' => $domain,
+      'ensure'   => $ensure,
+      'domain'   => $domain,
+      'password' => $password,
     }, $realm_parameters) })
   }
 

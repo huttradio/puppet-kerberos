@@ -55,7 +55,7 @@ class kerberos::client::conf::realms
     { "${conf}::realms":
       target	=> $client_conf_file,
       order	  => '03',
-      content => '\n[realms]\n',
+      content => "\n[realms]\n",
     }
   }
 }

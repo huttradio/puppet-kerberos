@@ -44,8 +44,10 @@
 #
 define kerberos::kdc::realm::db
 (
-  $ensure = 'present',
+  $password,
   $realm  = $title,
+
+  $ensure = 'present',
 
   $kdb5_util = $::kerberos::params::kdb5_util,
 )
@@ -54,7 +56,7 @@ define kerberos::kdc::realm::db
   {
     exec
     { "kerberos::kdc::realm::db::create::${realm}":
-      command => "${kdb5_util} create -s -r ${realm}",
+      command => "${kdb5_util} create -s -r ${realm} -P ${password}",
     }
   }
 }

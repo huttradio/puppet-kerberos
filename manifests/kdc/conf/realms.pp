@@ -48,7 +48,7 @@ class kerberos::kdc::conf::realms
     { "${kdc_conf_file}::realms":
       target  => $kdc_conf_file,
       order   => '03',
-      content => '\n[realms]\n',
+      content => "\n[realms]\n",
     }
   }
 }

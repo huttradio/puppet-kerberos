@@ -48,7 +48,7 @@ class kerberos::client::conf::capaths
     { "${client_conf_file}::capaths":
       target  => $client_conf_file,
       order   => '05',
-      content => '\n[capaths]\n',
+      content => "\n[capaths]\n",
     }
   }
 }

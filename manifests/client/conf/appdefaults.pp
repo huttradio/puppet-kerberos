@@ -48,7 +48,7 @@ class kerberos::client::conf::appdefaults
     { "${client_conf_file}::appdefaults":
       target  => $client_conf_file,
       order   => '06',
-      content => '\n[appdefaults]\n',
+      content => "\n[appdefaults]\n",
     }
   }
 }

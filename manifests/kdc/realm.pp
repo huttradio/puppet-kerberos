@@ -44,8 +44,10 @@
 #
 define kerberos::kdc::realm
 (
+  $password,
+  $realm = $title,
+
   $ensure = 'present',
-  $realm  = $title,
 
   $slaves = undef,
   $master = undef,
@@ -81,7 +83,8 @@ define kerberos::kdc::realm
   {
     ::kerberos::kdc::realm::db
     { $realm:
-      ensure => $ensure,
+      ensure   => $ensure,
+      password => $password,
     }
   }
 }

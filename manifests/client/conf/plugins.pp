@@ -52,7 +52,7 @@ class kerberos::client::conf::plugins
     { "${client_conf_file}::plugins":
       target  => $client_conf_file,
       order   => '07',
-      content => '\n[plugins]\n',
+      content => "\n[plugins]\n",
     }
   }
 }

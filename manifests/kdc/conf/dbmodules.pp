@@ -48,7 +48,7 @@ class kerberos::kdc::conf::dbmodules
     { "${kdc_conf_file}::dbmodules":
       target  => $kdc_conf_file,
       order   => '05',
-      content => '\n[dbmodules]\n',
+      content => "\n[dbmodules]\n",
     }
   }
 }

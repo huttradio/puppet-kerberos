@@ -48,7 +48,7 @@ class kerberos::kdc::conf::otp
     { "${kdc_conf_file}::otp":
       target  => $kdc_conf_file,
       order   => '06',
-      content => '\n[otp]\n',
+      content => "\n[otp]\n",
     }
   }
 }
