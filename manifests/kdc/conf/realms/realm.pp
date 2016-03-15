@@ -37,8 +37,10 @@
 #
 define kerberos::kdc::conf::realms::realm
 (
-  $ensure = 'present',
-  $realm  = $title,
+  $realm  = $name,
+
+  $ensure         = 'present',
+  $manage_section = true,
 
   # kerberos::kdc::conf::realm parameters.
   $acl_file                     = undef,
@@ -77,6 +79,11 @@ define kerberos::kdc::conf::realms::realm
 {
   if ($ensure == 'present')
   {
+    if ($manage_section)
+    {
+      include ::kerberos::kdc::conf::realms
+    }
+
     ::concat::fragment
     { "${kdc_conf_file}::realms::${realm}":
       target  => $kdc_conf_file,

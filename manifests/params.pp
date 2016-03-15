@@ -95,20 +95,20 @@ class kerberos::params
       $kdc_kpropd_acl_host_prefix = 'host'
 
       # Admin server configuration options.
-      $admin_server_packages = 'krb5-admin-server'
-      $admin_server_service  = 'krb5-admin-server'
+      $kdc_kadmin_server_package = 'krb5-admin-server'
+      $kdc_kadmin_server_service = 'krb5-admin-server'
 
-      $admin_server_conf_dir = '/etc/krb5kdc'
+      $kdc_kadmin_server_conf_dir = '/etc/krb5kdc'
 
-      $admin_server_keytab       = "${admin_server_conf_dir}/kadm5.keytab"
-      $admin_server_keytab_owner = 'root'
-      $admin_server_keytab_group = 'root'
-      $admin_server_keytab_mode  = '0400'
+      $kdc_kadmin_server_keytab       = "${kdc_kadmin_server_conf_dir}/kadm5.keytab"
+      $kdc_kadmin_server_keytab_owner = 'root'
+      $kdc_kadmin_server_keytab_group = 'root'
+      $kdc_kadmin_server_keytab_mode  = '0400'
 
-      $admin_server_acl_file  = "${admin_server_conf_dir}/kadm5.acl"
-      $admin_server_acl_owner = 'root'
-      $admin_server_acl_group = 'root'
-      $admin_server_acl_mode  = '0400'
+      $kdc_kadmin_server_acl_file  = "${kdc_kadmin_server_conf_dir}/kadm5.acl"
+      $kdc_kadmin_server_acl_owner = 'root'
+      $kdc_kadmin_server_acl_group = 'root'
+      $kdc_kadmin_server_acl_mode  = '0400'
     }
 
     default:

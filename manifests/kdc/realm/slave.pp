@@ -59,11 +59,11 @@ define kerberos::kdc::realm::slave
 {
   if ($manage_realm)
   {
-    create_resources('::kerberos::kdc::realm', $realm, merge(
+    create_resources('::kerberos::kdc::realm', { $realm => merge(
     {
       'ensure' => $ensure,
       'domain' => $domain,
-    }, $realm_parameters)
+    }, $realm_parameters) })
   }
 
   if ($manage_kpropd_acl_realm)

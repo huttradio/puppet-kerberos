@@ -35,10 +35,12 @@
 #
 # Copyright 2014 Your name here, unless otherwise noted.
 #
-define kerberos::kdc::dbmodules::realm
+define kerberos::kdc::conf::dbmodules::realm
 (
-  $ensure = 'present',
-  $realm  = $title,
+  $realm  = $name,
+
+  $ensure         = 'present',
+  $manage_section = true,
 
   $database_name              = undef,
   $db_library                 = undef,
@@ -55,10 +57,18 @@ define kerberos::kdc::dbmodules::realm
   $kdc_conf_file = $::kerberos::kdc::conf::file,
 )
 {
-  concat::fragment
-  { "${kdc_conf_file}::dbmodules::${realm}":
-    target  => $kdc_conf_file,
-    order   => "05-${realm}",
-    content => template('kerberos/kdc/conf/dbmodules/realm.erb'),
+  if ($ensure == 'present')
+  {
+    if ($manage_section)
+    {
+      include ::kerberos::kdc::conf::dbmodules
+    }
+
+    concat::fragment
+    { "${kdc_conf_file}::dbmodules::${realm}":
+      target  => $kdc_conf_file,
+      order   => "05-${realm}",
+      content => template('kerberos/kdc/conf/dbmodules/realm.erb'),
+    }
   }
 }

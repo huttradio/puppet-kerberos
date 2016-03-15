@@ -66,7 +66,7 @@ define kerberos::kdc::principal
     exec
     { "::kerberos::kdc::principal::${principal}":
       command => "${kadmin_local} -r ${realm} -q \"add_principal ${_options} ${principal}\"",
-      unless  => "${kadmin_local} -r ${realm} -q \"list_principals ${principal}\" | ${grep} \"${principal\"",
+      unless  => "${kadmin_local} -r ${realm} -q \"list_principals ${principal}\" | ${grep} \"${principal}\"",
     }
   }
   elsif ($ensure == 'absent')
@@ -74,7 +74,7 @@ define kerberos::kdc::principal
     exec
     { "::kerberos::kdc::principal::${principal}":
       command => "${kadmin_local} -r ${realm} -q \"delete_principal -force ${principal}\"",
-      onlyif  => "${kadmin_local} -r ${realm} -q \"list_principals ${principal}\" | ${grep} \"${principal\"",
+      onlyif  => "${kadmin_local} -r ${realm} -q \"list_principals ${principal}\" | ${grep} \"${principal}\"",
     }
   }
 

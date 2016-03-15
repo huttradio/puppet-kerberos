@@ -39,7 +39,8 @@ define kerberos::client::conf::plugins::name
 (
   $subsection,
 
-  $ensure = 'present',
+  $ensure         = 'present',
+  $manage_section = true,
 
   $client_conf_file = $::kerberos::client::conf::file,
 )
@@ -48,6 +49,11 @@ define kerberos::client::conf::plugins::name
 
   if ($ensure == 'present')
   {
+    if ($manage_section)
+    {
+      include ::kerberos::client::conf::plugins
+    }
+
     concat::fragment
     { "${client_conf_file}::plugins::${name}":
       target  => $client_conf_file,

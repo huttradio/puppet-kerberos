@@ -55,7 +55,7 @@ define kerberos::client::realm
 {
   if ($manage_conf_realm)
   {
-    ::kerberos::client::conf::realm
+    ::kerberos::client::conf::realms::realm
     { $realm:
       ensure => $ensure,
     }

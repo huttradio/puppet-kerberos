@@ -65,11 +65,11 @@ define kerberos::kdc::realm::master
 
   if ($manage_realm)
   {
-    create_resources('::kerberos::kdc::realm', $realm, merge(
+    create_resources('::kerberos::kdc::realm', { $realm => merge(
     {
       'ensure' => $ensure,
       'domain' => $domain,
-    }, $realm_parameters)
+    }, $realm_parameters) })
   }
 
   if ($manage_kiprop_principal)
@@ -82,7 +82,7 @@ define kerberos::kdc::realm::master
 
   if ($manage_kadmin_server_acl_kiprop_principal)
   {
-    ::kerberos::kdc::admin_server::acl::principal
+    ::kerberos::kdc::kadmin_server::acl::principal
     { $_kiprop_principal:
       ensure      => $ensure,
       permissions => $kdc_kadmin_server_acl_kiprop_principal_permissions,

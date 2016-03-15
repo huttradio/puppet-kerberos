@@ -40,15 +40,24 @@ define kerberos::client::conf::domain_realm::mapping
 	$realm,
   $domain = $name,
 
-  $ensure = 'present',
+  $ensure         = 'present',
+  $manage_section = true,
 
   $client_conf_file = $::kerberos::client::conf::file,
 )
 {
-  concat::fragment
-  { "${client_conf_file}::domain_realm::${domain}":
-    target  => $client_conf_file,
-    order   => "03-${domain}",
-    content => ".${domain} = ${realm}\n",
+  if ($ensure == 'present')
+  {
+    if ($manage_section)
+    {
+      include ::kerberos::client::conf::domain_realm
+    }
+
+    concat::fragment
+    { "${client_conf_file}::domain_realm::${domain}":
+      target  => $client_conf_file,
+      order   => "03-${domain}",
+      content => ".${domain} = ${realm}\n",
+    }
   }
 }

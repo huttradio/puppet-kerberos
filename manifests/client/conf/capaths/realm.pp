@@ -40,7 +40,8 @@ define kerberos::client::conf::capath::realm
   $subsection,
   $realm = $name,
 
-  $ensure = 'present',
+  $ensure         = 'present',
+  $manage_section = true,
 
   $client_conf_file = $::kerberos::client::conf::file,
 )
@@ -49,6 +50,11 @@ define kerberos::client::conf::capath::realm
 
   if ($ensure == 'present')
   {
+    if ($manage_section)
+    {
+      include ::kerberos::client::conf::capath
+    }
+
     concat::fragment
     { "${client_conf_file}::capaths::${realm}":
       target  => $client_conf_file,

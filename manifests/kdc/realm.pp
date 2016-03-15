@@ -62,19 +62,19 @@ define kerberos::kdc::realm
 {
   if ($manage_client_realm)
   {
-    create_resources('::kerberos::client::realm', $realm, merge(
+    create_resources('::kerberos::client::realm', { $realm => merge(
     {
       'ensure' => $ensure,
       'domain' => $domain,
-    }, $client_realm_parameters)
+    }, $client_realm_parameters) })
   }
 
   if ($manage_kdc_conf_realm)
   {
-    create_resources('::kerberos::kdc::conf::realm', $realm, merge(
+    create_resources('::kerberos::kdc::conf::realms::realm', { $realm => merge(
     {
       'ensure' => $ensure,
-    }, $kdc_conf_realm_parameters)
+    }, $kdc_conf_realm_parameters) })
   }
 
   if ($manage_realm_db)

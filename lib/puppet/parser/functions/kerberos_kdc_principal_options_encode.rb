@@ -30,4 +30,5 @@ module Puppet::Parser::Functions
     end
 
     string
+  end
 end

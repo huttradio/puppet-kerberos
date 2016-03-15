@@ -45,13 +45,13 @@
 define kerberos::kdc::kadmin_server::acl::principal
 (
   $permissions,
-  $principal = $title,
+  $principal = $name,
+  $file      = $::kerberos::params::kdc_kadmin_server_acl_file,
 
   $target_principal = undef,
   $restrictions     = undef,
 
   $ensure = 'present',
-  $file   = $::kerberos::kdc::admin_server::acl::file,
 )
 {
   if ($ensure == 'present')

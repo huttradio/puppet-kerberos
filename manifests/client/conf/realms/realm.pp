@@ -42,43 +42,48 @@
 #
 # Copyright 2016 Hutt Community Radio and Audio Archives Charitable Trust.
 #
-define kerberos::client::conf::realm
+define kerberos::client::conf::realms::realm
 (
-  $ensure = 'present',
+  $realm = $name,
 
-	$realm = $title,
-  $file  = $::kerberos::client::conf::file,
+  $ensure         = 'present',
+  $manage_section = true,
 
-	$admin_server        = undef,
-	$auth_to_local       = undef,
-	$auth_to_local_names = undef,
-	$default_domain      = undef,
-	$http_anchors        = undef,
-	$kdc_dns_srv		     = false,
-	$kdc                 = undef,
+  $admin_server        = undef,
+  $auth_to_local       = undef,
+  $auth_to_local_names = undef,
+  $default_domain      = undef,
+  $http_anchors        = undef,
+  $kdc_dns_srv         = false,
+  $kdc                 = undef,
   $kpasswd_server      = undef,
   $master_kdc          = undef,
   $v4_instance_convert = undef,
   $v4_realm            = undef,
+
+  $client_conf_file = $::kerberos::client::conf::file,
 )
 {
-  if (!defined(Class['::kerberos::client::conf']))
-  {
-    fail('::kerberos::client::conf is not defined')
-  }
-
+  # Validate parameters.
   if ($kdc_dns_srv == false)
   {
     validate_string($kdc)
   }
 
-  include ::kerberos::client::realms
+  if ($ensure == 'present')
+  {
+    # Include section class.
+    if ($manage_section)
+    {
+      include ::kerberos::client::conf::realms
+    }
 
-  ::concat::fragment
-  { "${conf}::realms::${realm}":
-    ensure  => $ensure,
-    target  => $file,
-    order   => "02-${realm}",
-    content => template("kerberos/client/conf/realm.erb"),
+    ::concat::fragment
+    { "${client_conf_file}::realms::${realm}":
+      ensure  => $ensure,
+      target  => $client_conf_file,
+      order   => "02-${realm}",
+      content => template('kerberos/client/conf/realms/realm.erb'),
+    }
   }
 } 

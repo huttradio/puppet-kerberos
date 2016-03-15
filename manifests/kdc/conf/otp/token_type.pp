@@ -35,9 +35,10 @@
 #
 # Copyright 2014 Your name here, unless otherwise noted.
 #
-define kerberos::kdc::otp::token_type
+define kerberos::kdc::conf::otp::token_type
 (
-  $ensure = 'present',
+  $ensure         = 'present',
+  $manage_section = true,
 
   $server      = undef,
   $secret      = undef,
@@ -50,6 +51,11 @@ define kerberos::kdc::otp::token_type
 {
   if ($ensure == 'present')
   {
+    if ($manage_section)
+    {
+      include ::kerberos::kdc::conf::otp
+    }
+
     concat::fragment
     { "${kdc_conf_file}::otp::${name}":
       target  => $kdc_conf_file,
