@@ -47,7 +47,8 @@ define kerberos::kdc::principal
   $principal = regsubst($title, '^(.*)@(.*)$', '\1'),
   $realm     = regsubst($title, '^(.*)@(.*)$', '\2'),
 
-  $ensure = 'present',
+  $ensure              = 'present',
+  $manage_dependencies = true,
 
   # For details on options see this:
   # http://web.mit.edu/Kerberos/krb5-1.12/doc/admin/admin_commands/kadmin_local.html#commands
@@ -78,5 +79,9 @@ define kerberos::kdc::principal
     }
   }
 
-  Class['::kerberos::kdc::kadmin_server::service'] -> Exec["::kerberos::kdc::principal::${principal}"]
+  if ($manage_dependencies)
+  {
+    ::Kerberos::Kdc::Realm[$realm]                   -> Exec["::kerberos::kdc::principal::${principal}"]
+    Class['::kerberos::kdc::kadmin_server::service'] -> Exec["::kerberos::kdc::principal::${principal}"]
+  }
 }

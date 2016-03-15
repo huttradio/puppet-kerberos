@@ -55,8 +55,17 @@ define kerberos::kdc::realm::db
   if ($ensure == 'present')
   {
     exec
-    { "kerberos::kdc::realm::db::create::${realm}":
-      command => "${kdb5_util} create -s -r ${realm} -P ${password}",
+    { "kerberos::kdc::realm::db::${realm}":
+      command => "${kdb5_util} create -s -r '${realm}' -P '${password}'",
+      unless  => "${kdb5_util} list_mkeys -r '${realm}'",
+    }
+  }
+  elsif ($ensure == 'absent')
+  {
+    exec
+    { "kerberos::kdc::realm::db::${realm}":
+      command => "${kdb5_util} destroy -f -r '${realm}'",
+      onlyif  => "${kdb5_util} list_mkeys -r '${realm}'",
     }
   }
 }

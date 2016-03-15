@@ -68,7 +68,7 @@ class kerberos::client::conf
     { "${file}::newline":
       target  => $file,
       order   => '01',
-      content => '\n',
+      content => "\n",
     }
   }
 
