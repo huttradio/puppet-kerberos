@@ -113,6 +113,11 @@ class kerberos::params
       $kdc_kpropd_acl_mode        = '0400'
       $kdc_kpropd_acl_host_prefix = 'host'
 
+      $kdc_kpropd_bootstrap_file  = '/usr/local/bin/kpropd-bootstrap'
+      $kdc_kpropd_bootstrap_owner = 'root'
+      $kdc_kpropd_bootstrap_group = 'root'
+      $kdc_kpropd_bootstrap_mode  = '0555'
+
       # Admin server configuration options.
       $kdc_kadmin_server_package = 'krb5-admin-server'
       $kdc_kadmin_server_service = 'krb5-admin-server'

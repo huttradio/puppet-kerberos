@@ -44,7 +44,9 @@
 #
 class kerberos::kdc::kpropd::service
 (
-  $ensure  = 'present',
+  $ensure              = 'present',
+  $manage_dependencies = true,
+
   $service = $::kerberos::params::kdc_kpropd_service,
 ) inherits kerberos::params
 {
@@ -82,14 +84,17 @@ class kerberos::kdc::kpropd::service
 		ensure	=> $service_ensure,
 	}
 
-  if ($ensure == 'present')
+  if ($manage_dependencies)
   {
-    Class['::kerberos::kdc::kpropd::service::init_d']  -> Service[$service]
-    Class['::kerberos::kdc::kpropd::service::systemd'] -> Service[$service]
-  }
-  elsif ($ensure == 'absent')
-  {
-    Service[$service] -> Class['::kerberos::kdc::kpropd::service::init_d']
-    Service[$service] -> Class['::kerberos::kdc::kpropd::service::systemd']
+    if ($ensure == 'present')
+    {
+      Class['::kerberos::kdc::kpropd::service::init_d']  -> Service[$service]
+      Class['::kerberos::kdc::kpropd::service::systemd'] -> Service[$service]
+    }
+    elsif ($ensure == 'absent')
+    {
+      Service[$service] -> Class['::kerberos::kdc::kpropd::service::init_d']
+      Service[$service] -> Class['::kerberos::kdc::kpropd::service::systemd']
+    }
   }
 }

@@ -52,8 +52,9 @@ class kerberos::kdc::kpropd::bootstrap
   $group = $::kerberos::params::kdc_kpropd_bootstrap_group,
   $mode  = $::kerberos::params::kdc_kpropd_bootstrap_mode,
 
-  $kdc_keytab       = $::kerberos::params::kdc_keytab,
-  $kdc_database_dir = $::kerberos::params::kdc_database_dir,
+  $kdc_keytab_file        = $::kerberos::params::kdc_keytab_file,
+  $kdc_database_dir       = $::kerberos::params::kdc_database_dir,
+  $kdc_database_dump_name = $::kerberos::params::kdc_database_dump_name,
 )
 {
   file
