@@ -53,6 +53,7 @@ class kerberos::params
       $kprop        = '/usr/sbin/kprop'
       $kpropd       = '/usr/sbin/kpropd'
       $rm           = '/bin/rm'
+      $test         = '/usr/bin/test'
 
       ## Client configuration options.
       $client_package = 'krb5-user'

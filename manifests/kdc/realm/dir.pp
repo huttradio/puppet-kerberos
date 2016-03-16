@@ -85,6 +85,7 @@ define kerberos::kdc::realm::dir
       group  => $kdc_conf_dir_group,
       mode   => $kdc_conf_dir_mode,
     }
+  }
 
   if ($manage_database_dir)
   {

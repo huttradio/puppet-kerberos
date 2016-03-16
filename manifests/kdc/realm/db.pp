@@ -47,9 +47,10 @@ define kerberos::kdc::realm::db
   $password,
   $realm  = $title,
 
-  $ensure       = 'present',
-  $manage_db    = true,
-  $manage_stash = true,
+  $ensure              = 'present',
+  $manage_db           = true,
+  $manage_stash        = true,
+  $manage_dependencies = true,
 
   $kdc_conf_dir_realm          = undef,
   $kdc_stash_file              = undef,
@@ -110,6 +111,7 @@ define kerberos::kdc::realm::db
 
       if ($manage_dependencies)
       {
+        Class['::kerberos::kdc::conf']      -> Exec["kerberos::kdc::realm::db::${realm}"]
         ::Kerberos::Kdc::Realm::Dir[$realm] -> Exec["kerberos::kdc::realm::db::${realm}"]
       }
     }
@@ -140,6 +142,7 @@ define kerberos::kdc::realm::db
 
       if ($manage_dependencies)
       {
+        Class['::kerberos::kdc::conf']      -> Exec["kerberos::kdc::realm::stash::${realm}"]
         ::Kerberos::Kdc::Realm::Dir[$realm] -> Exec["kerberos::kdc::realm::stash::${realm}"]
       }
     }
