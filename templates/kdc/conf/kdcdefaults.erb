@@ -1,19 +1,19 @@
 [kdcdefaults]
 <% if @host_based_services -%>
-host_based_services = <%= Array(@host_based_services).join(",") %>
+	host_based_services = <%= Array(@host_based_services).join(",") %>
 <% end -%>
 <% if @kdc_ports -%>
-kdc_ports = <%= Array(@kdc_ports).join(",") %>
+	kdc_ports = <%= Array(@kdc_ports).join(",") %>
 <% end -%>
 <% if @kdc_tcp_ports -%>
-kdc_tcp_ports = <%= Array(@kdc_tcp_ports).join(",") %>
+	kdc_tcp_ports = <%= Array(@kdc_tcp_ports).join(",") %>
 <% end -%>
 <% if @no_host_referral -%>
-no_host_referral = Array(@no_host_referral).join(",")
+	no_host_referral = Array(@no_host_referral).join(",")
 <% end -%>
 <% if @restrict_anonymous_to_tgt -%>
-restrict_anonymous_to_tft = <%= @restrict_anonymous_to_tgt %>
+	restrict_anonymous_to_tft = <%= @restrict_anonymous_to_tgt %>
 <% end -%>
 <% if @kdc_max_dgram_reply_size -%>
-kdc_max_dgram_reply_size = <%= @kdc_max_dgram_reply_size %>
+	kdc_max_dgram_reply_size = <%= @kdc_max_dgram_reply_size %>
 <% end -%>

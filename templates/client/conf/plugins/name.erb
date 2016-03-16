@@ -1,14 +1,14 @@
-<%= @name %> = {
+	<%= @name %> = {
 <% @subsection.each_pair do |key, value| -%>
 <% if key == 'disable' -%>
-	disable = <%= Array(@disable).join(",") %>
+		disable = <%= Array(@disable).join(",") %>
 <% elsif key == 'enable_only' -%>
-	enable_only = <%= Array(@enable_only).join(",") %>
+		enable_only = <%= Array(@enable_only).join(",") %>
 <% end -%>
 <% elsif key == 'module' -%>
-	module = <%= Array(@module).join(",") %>
+		module = <%= Array(@module).join(",") %>
 <% else -%>
-	<%= key %> = <%= value %>
+		<%= key %> = <%= value %>
 <% end -%>
 <% end -%>
-}
+	}

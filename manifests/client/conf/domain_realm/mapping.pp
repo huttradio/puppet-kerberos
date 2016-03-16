@@ -57,7 +57,7 @@ define kerberos::client::conf::domain_realm::mapping
     { "${client_conf_file}::domain_realm::${domain}":
       target  => $client_conf_file,
       order   => "04-${domain}",
-      content => ".${domain} = ${realm}\n",
+      content => "\t.${domain} = ${realm}\n",
     }
   }
 }

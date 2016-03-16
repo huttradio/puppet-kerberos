@@ -1,95 +1,96 @@
+
 [libdefaults]
 <% if @allow_weak_crypto -%>
-allow_weak_crypto = <%= @allow_weak_crypto %>
+	allow_weak_crypto = <%= @allow_weak_crypto %>
 <% end -%>
 <% if @ap_req_checksum_type -%>
-ap_req_checksum_type = <%= @ap_req_checksum_type %>
+	ap_req_checksum_type = <%= @ap_req_checksum_type %>
 <% end -%>
 <% if @canonicalize -%>
-canonicalize = <%= @canonicalize %>
+	canonicalize = <%= @canonicalize %>
 <% end -%>
 <% if @ccache_type -%>
-ccache_type = <%= @ccache_type %>
+	ccache_type = <%= @ccache_type %>
 <% end -%>
 <% if @clockskew -%>
-clockskew = <%= @clockskew %>
+	clockskew = <%= @clockskew %>
 <% end -%>
 <% if @default_ccache_name -%>
-default_ccache_name = <%= @default_ccache_name %>
+	default_ccache_name = <%= @default_ccache_name %>
 <% end -%>
 <% if @default_client_keytab_name -%>
-default_client_keytab_name = <%= @default_client_keytab_name %>
+	default_client_keytab_name = <%= @default_client_keytab_name %>
 <% end -%>
-default_realm = <%= @default_realm %>
+	default_realm = <%= @default_realm %>
 <% if @default_tgs_enctypes -%>
-default_tgs_enctypes = <%= Array(@default_tgs_enctypes).join(",") %>
+	default_tgs_enctypes = <%= Array(@default_tgs_enctypes).join(",") %>
 <% end -%>
 <% if @default_tkt_enctypes -%>
-default_tkt_enctypes = <%= Array(@default_tkt_enctypes).join(",") %>
+	default_tkt_enctypes = <%= Array(@default_tkt_enctypes).join(",") %>
 <% end -%>
-<% if @dns_canonicalize_hostname -%>
-dns_canonicalize_hostname = <%= @dns_canonicalize_hostname %>
-<% end -%>
+	<% if @dns_canonicalize_hostname -%>
+	dns_canonicalize_hostname = <%= @dns_canonicalize_hostname %>
+	<% end -%>
 <% if @dns_lookup_dc -%>
-dns_lookup_dc = <%= @dns_lookup_dc %>
+	dns_lookup_dc = <%= @dns_lookup_dc %>
 <% end -%>
 <% if @extra_addresses -%>
-extra_addresses = <%= Array(@extra_addresses).join(",") %>
+	extra_addresses = <%= Array(@extra_addresses).join(",") %>
 <% end -%>
 <% if @forwardable -%>
-forwardable = <%= @forwardable %>
+	forwardable = <%= @forwardable %>
 <% end -%>
 <% if @ignore_acceptor_hostname -%>
-ignore_acceptor_hostname = <%= @ignore_acceptor_hostname %>
+	ignore_acceptor_hostname = <%= @ignore_acceptor_hostname %>
 <% end -%>
 <% if @k5login_authoritative -%>
-k5login_authoritative = <%= @k5login_authoritative %>
+	k5login_authoritative = <%= @k5login_authoritative %>
 <% end -%>
 <% if @k5login_directory -%>
-k5login_directory = <%= @k5login_directory %>
+	k5login_directory = <%= @k5login_directory %>
 <% end -%>
 <% if @kdc_default_options -%>
-kdc_default_options = <%= @kdc_default_options %>
+	kdc_default_options = <%= @kdc_default_options %>
 <% end -%>
 <% if @kdc_timesync -%>
-kdc_timesync = <%= @kdc_timesync %>
+	kdc_timesync = <%= @kdc_timesync %>
 <% end -%>
 <% if @kdc_req_checksum_type -%>
-kdc_req_checksum_type = <%= @kdc_req_checksum_type %>
+	kdc_req_checksum_type = <%= @kdc_req_checksum_type %>
 <% end -%>
 <% if @noaddresses -%>
-noaddresses = <%= @noaddresses %>
+	noaddresses = <%= @noaddresses %>
 <% end -%>
 <% if @permitted_enctypes -%>
-permitted_enctypes = <%= Array(@permitted_enctypes).join(",") %>
+	permitted_enctypes = <%= Array(@permitted_enctypes).join(",") %>
 <% end -%>
 <% if @plugin_base_dir -%>
-plugin_base_dir = <%= @plugin_base_dir %>
+	plugin_base_dir = <%= @plugin_base_dir %>
 <% end -%>
 <% if @preferred_preauth_types -%>
-preferred_preauth_types = <%= Array(@preferred_preauth_types).join(",") %>
+	preferred_preauth_types = <%= Array(@preferred_preauth_types).join(",") %>
 <% end -%>
 <% if @proxiable -%>
-proxiable = <%= @proxiable %>
+	proxiable = <%= @proxiable %>
 <% end -%>
 <% if @rdns -%>
-rdns = <%= @rdns %>
+	rdns = <%= @rdns %>
 <% end -%>
 <% if @realm_try_domains -%>
-realm_try_domains = <%= @realm_try_domains %>
+	realm_try_domains = <%= @realm_try_domains %>
 <% end -%>
 <% if @renew_lifetime -%>
-renew_lifetime = <%= @renew_lifetime %>
+	renew_lifetime = <%= @renew_lifetime %>
 <% end -%>
 <% if @safe_checksum_type -%>
-safe_checksum_type = <%= @safe_checksum_type %>
+	safe_checksum_type = <%= @safe_checksum_type %>
 <% end -%>
 <% if @ticket_lifetime -%>
-ticket_lifetime = <%= @ticket_lifetime %>
+	ticket_lifetime = <%= @ticket_lifetime %>
 <% end -%>
 <% if @udp_preference_limit -%>
-udp_preference_limit = <%= @udp_preference_limit %>
+	udp_preference_limit = <%= @udp_preference_limit %>
 <% end -%>
 <% if @verify_ap_req_nofail -%>
-verify_ap_req_nofail = <%= @verify_ap_req_nofail %>
+	verify_ap_req_nofail = <%= @verify_ap_req_nofail %>
 <% end -%>
