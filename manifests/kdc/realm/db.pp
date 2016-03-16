@@ -120,7 +120,7 @@ define kerberos::kdc::realm::db
     {
       exec
       { "kerberos::kdc::realm::stash::${realm}":
-        command => "${kdb5_util} stash -r '${realm}' -f '${_kdc_stash_file}'",
+        command => "${kdb5_util} stash -r '${realm}' -P '${password}' -f '${_kdc_stash_file}'",
         creates => $_kdc_stash_file,
       }
 
