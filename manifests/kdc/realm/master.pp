@@ -52,6 +52,7 @@ define kerberos::kdc::realm::master
 
   $manage_realm     = true,
   $domain           = undef,
+  $iprop_port       = $::kerberos::params::kdc_kpropd_iprop_port,
   $realm_parameters = {},
 
   $manage_kiprop_principal = true,
@@ -69,9 +70,11 @@ define kerberos::kdc::realm::master
   {
     create_resources('::kerberos::kdc::realm', { $realm => merge(
     {
-      'ensure'   => $ensure,
-      'domain'   => $domain,
-      'password' => $password,
+      'ensure'       => $ensure,
+      'domain'       => $domain,
+      'password'     => $password,
+      'iprop_enable' => true,
+      'iprop_port'   => $iprop_port,
     }, $realm_parameters) })
   }
 

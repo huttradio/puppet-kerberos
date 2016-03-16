@@ -56,7 +56,7 @@ define kerberos::client::conf::domain_realm::mapping
     concat::fragment
     { "${client_conf_file}::domain_realm::${domain}":
       target  => $client_conf_file,
-      order   => "03-${domain}",
+      order   => "04-${domain}",
       content => ".${domain} = ${realm}\n",
     }
   }

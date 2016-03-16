@@ -8,8 +8,8 @@
 <% if @database_module -%>
 	database_module = <%= @database_module %>
 <% end -%>
-<% if @database_name -%>
-	database_name = <%= @database_name %>
+<% if @_database_name -%>
+	database_name = <%= @_database_name %>
 <% end -%>
 <% if @default_principal_expiration -%>
 	default_principal_expiration = <%= @default_principal_expiration %>
@@ -44,8 +44,8 @@
 <% if @kadmind_port -%>
 	kadmind_port = <%= @kadmind_port %>
 <% end -%>
-<% if @key_stash_file -%>
-	key_stash_file = <%= @key_stash_file %>
+<% if @_key_stash_file -%>
+	key_stash_file = <%= @_key_stash_file %>
 <% end -%>
 <% if @kdc_ports -%>
 	kdc_ports = <%= Array(@kdc_ports).join(",") %>

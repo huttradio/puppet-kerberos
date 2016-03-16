@@ -43,6 +43,8 @@ class kerberos::params
     {
       ## Executable locations.
       $cat          = '/bin/cat'
+      $echo         = '/bin/echo'
+      $false        = '/bin/false'
       $grep         = '/bin/grep'
       $kadmin       = '/usr/bin/kadmin'
       $kadmin_local = '/usr/sbin/kadmin.local'
@@ -64,8 +66,10 @@ class kerberos::params
       $kdc_package = 'krb5-kdc'
       $kdc_service = 'krb5-kdc'
 
-      $kdc_conf_dir     = '/etc/krb5kdc'
-      $kdc_database_dir = '/var/lib/krb5kdc'
+      $kdc_conf_dir       = '/etc/krb5kdc'
+      $kdc_conf_dir_owner = 'root'
+      $kdc_conf_dir_group = 'root'
+      $kdc_conf_dir_mode  = '0444'
 
       $kdc_conf_file  = "${kdc_conf_dir}/kdc.conf"
       $kdc_conf_owner = 'root'
@@ -77,16 +81,30 @@ class kerberos::params
       $kdc_keytab_group = 'root'
       $kdc_keytab_mode  = '0400'
 
-      $kdc_stash_file  = "${kdc_conf_dir}/stash"
+      $kdc_stash_name  = 'stash'
       $kdc_stash_owner = 'root'
       $kdc_stash_group = 'root'
       $kdc_stash_mode  = '0400'
 
-      $kdc_database      = "${kdc_database_dir}/principal"
-      $kdc_database_dump = "${kdc_database_dir}/dump"
+      $kdc_database_dir       = '/var/lib/krb5kdc'
+      $kdc_database_dir_owner = 'root'
+      $kdc_database_dir_group = 'root'
+      $kdc_database_dir_mode  = '0400'
+
+      $kdc_database_principal_name  = 'principal'
+      $kdc_database_principal_owner = 'root'
+      $kdc_database_principal_group = 'root'
+      $kdc_database_principal_mode  = '0600'
+
+      $kdc_database_dump_name  = 'dump'
+      $kdc_database_dump_owner = 'root'
+      $kdc_database_dump_group = 'root'
+      $kdc_database_dump_mode  = '0400'
 
       # kpropd configuration options for KDCs.
       $kdc_kpropd_service = 'krb5-kpropd'
+
+      $kdc_kpropd_iprop_port = 2121
 
       $kdc_kpropd_acl_file        = "${kdc_conf_dir}/kpropd.acl"
       $kdc_kpropd_acl_owner       = 'root'
@@ -100,7 +118,7 @@ class kerberos::params
 
       $kdc_kadmin_server_conf_dir = '/etc/krb5kdc'
 
-      $kdc_kadmin_server_keytab       = "${kdc_kadmin_server_conf_dir}/kadm5.keytab"
+      $kdc_kadmin_server_keytab_file  = "${kdc_kadmin_server_conf_dir}/kadm5.keytab"
       $kdc_kadmin_server_keytab_owner = 'root'
       $kdc_kadmin_server_keytab_group = 'root'
       $kdc_kadmin_server_keytab_mode  = '0400'

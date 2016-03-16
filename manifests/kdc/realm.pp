@@ -52,6 +52,9 @@ define kerberos::kdc::realm
   $slaves = undef,
   $master = undef,
 
+  $iprop_enable = undef,
+  $iprop_port   = undef,
+
   $manage_client_realm     = true,
   $domain                  = undef,
   $client_realm_parameters = {},
@@ -59,7 +62,11 @@ define kerberos::kdc::realm
   $manage_kdc_conf_realm     = true,
   $kdc_conf_realm_parameters = {},
 
-  $manage_realm_db = true,
+  $manage_kdc_realm_dir = true,
+
+  $manage_kdc_realm_db = true,
+
+  $manage_dependencies = true,
 )
 {
   if ($manage_client_realm)
@@ -75,16 +82,28 @@ define kerberos::kdc::realm
   {
     create_resources('::kerberos::kdc::conf::realms::realm', { $realm => merge(
     {
-      'ensure' => $ensure,
+      'ensure'       => $ensure,
+      'iprop_enable' => $iprop_enable,
+      'iprop_port'   => $iprop_port,
     }, $kdc_conf_realm_parameters) })
   }
 
-  if ($manage_realm_db)
+  if ($manage_kdc_realm_dir)
+  {
+    ::kerberos::kdc::realm::dir
+    { $realm:
+      ensure => $ensure,
+    }
+  }
+
+  if ($manage_kdc_realm_db)
   {
     ::kerberos::kdc::realm::db
     { $realm:
-      ensure   => $ensure,
-      password => $password,
+      ensure              => $ensure,
+      password            => $password,
+
+      manage_dependencies => $manage_dependencies,
     }
   }
 }

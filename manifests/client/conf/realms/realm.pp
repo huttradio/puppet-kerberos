@@ -82,7 +82,7 @@ define kerberos::client::conf::realms::realm
     { "${client_conf_file}::realms::${realm}":
       ensure  => $ensure,
       target  => $client_conf_file,
-      order   => "02-${realm}",
+      order   => "03-${realm}",
       content => template('kerberos/client/conf/realms/realm.erb'),
     }
   }

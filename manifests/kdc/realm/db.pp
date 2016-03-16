@@ -47,25 +47,128 @@ define kerberos::kdc::realm::db
   $password,
   $realm  = $title,
 
-  $ensure = 'present',
+  $ensure       = 'present',
+  $manage_db    = true,
+  $manage_stash = true,
 
+  $kdc_conf_dir_realm          = undef,
+  $kdc_stash_file              = undef,
+
+  $kdc_database_dir_realm      = undef,
+  $kdc_database_principal_file = undef,
+
+  $echo      = $::kerberos::params::echo,
+  $false     = $::kerberos::params::false,
   $kdb5_util = $::kerberos::params::kdb5_util,
+  $test      = $::kerberos::params::test,
+
+  $kdc_conf_dir     = $::kerberos::params::kdc_conf_dir,
+  $kdc_database_dir = $::kerberos::params::kdc_database_dir,
+
+  $kdc_stash_name  = $::kerberos::params::kdc_stash_name,
+  $kdc_stash_owner = $::kerberos::params::kdc_stash_owner,
+  $kdc_stash_group = $::kerberos::params::kdc_stash_group,
+  $kdc_stash_mode  = $::kerberos::params::kdc_stash_mode,
+
+  $kdc_database_principal_name  = $::kerberos::params::kdc_database_principal_name,
+  $kdc_database_principal_owner = $::kerberos::params::kdc_database_principal_owner,
+  $kdc_database_principal_group = $::kerberos::params::kdc_database_principal_group,
+  $kdc_database_principal_mode  = $::kerberos::params::kdc_database_principal_mode,
 )
 {
+  $_kdc_database_dir_realm      = pick($kdc_database_dir_realm, "${kdc_database_dir}/${realm}")
+  $_kdc_database_principal_file = pick($kdc_database_principal_file, "${_kdc_database_dir_realm}/${kdc_database_principal_name}")
+
+  $_kdc_conf_dir_realm          = pick($kdc_conf_dir_realm, "${kdc_conf_dir}/${realm}")
+  $_kdc_stash_file              = pick($kdc_stash_file, "${_kdc_conf_dir_realm}/${kdc_stash_name}")
+
   if ($ensure == 'present')
   {
-    exec
-    { "kerberos::kdc::realm::db::${realm}":
-      command => "${kdb5_util} create -s -r '${realm}' -P '${password}'",
-      unless  => "${kdb5_util} list_mkeys -r '${realm}'",
+    if ($manage_db)
+    {
+      exec
+      { "kerberos::kdc::realm::db::${realm}":
+        command => "${kdb5_util} create -r '${realm}' -P '${password}'",
+        creates => $_kdc_database_principal_file,
+      }
+
+      exec
+      { "kerberos::kdc::realm::db::check::${realm}":
+        command => "${echo} 'Unable to find database for ${realm} after creating it' && ${false}",
+        unless  => "${test} -f '${_kdc_database_principal_file}'",
+      }
+
+      file
+      { $_kdc_database_principal_file:
+        ensure => 'file',
+        owner  => $kdc_database_principal_owner,
+        group  => $kdc_database_principal_group,
+        mode   => $kdc_database_principal_mode,
+      }
+
+      Exec["kerberos::kdc::realm::db::${realm}"] -> Exec["kerberos::kdc::realm::db::check::${realm}"] -> File[$_kdc_database_principal_file]
+
+      if ($manage_dependencies)
+      {
+        ::Kerberos::Kdc::Realm::Dir[$realm] -> Exec["kerberos::kdc::realm::db::${realm}"]
+      }
+    }
+
+    if ($manage_stash)
+    {
+      exec
+      { "kerberos::kdc::realm::stash::${realm}":
+        command => "${kdb5_util} stash -r '${realm}' -f '${_kdc_stash_file}'",
+        creates => $_kdc_stash_file,
+      }
+
+      exec
+      { "kerberos::kdc::realm::stash::check::${realm}":
+        command => "${echo} 'Unable to find stash for ${realm} after creating it' && ${false}",
+        unless  => "${test} -f '${_kdc_stash_file}'",
+      }
+
+      file
+      { $_kdc_stash_file:
+        ensure => 'file',
+        owner  => $kdc_stash_owner,
+        group  => $kdc_stash_group,
+        mode   => $kdc_stash_mode,
+      }
+
+      Exec["kerberos::kdc::realm::stash::${realm}"] -> Exec["kerberos::kdc::realm::stash::check::${realm}"] -> File[$_kdc_stash_file]
+
+      if ($manage_dependencies)
+      {
+        ::Kerberos::Kdc::Realm::Dir[$realm] -> Exec["kerberos::kdc::realm::stash::${realm}"]
+      }
     }
   }
   elsif ($ensure == 'absent')
   {
-    exec
-    { "kerberos::kdc::realm::db::${realm}":
-      command => "${kdb5_util} destroy -f -r '${realm}'",
-      onlyif  => "${kdb5_util} list_mkeys -r '${realm}'",
+    if ($manage_db)
+    {
+      exec
+      { "kerberos::kdc::realm::db::${realm}":
+        command => "${kdb5_util} destroy -f -r '${realm}'",
+        onlyif  => "${test} -f '${_kdc_database_principal_file}'",
+      }
+
+      exec
+      { "kerberos::kdc::realm::db::check::${realm}":
+        command => "${echo} 'Found database for ${realm} after destroying it' && ${false}",
+        onlyif  => "${test} -f '${_kdc_database_principal_file}'",
+      }
+
+      Exec["kerberos::kdc::realm::db::${realm}"] -> Exec["kerberos::kdc::realm::db::check::${realm}"]
+    }
+
+    if ($manage_stash)
+    {
+      file
+      { $_kdc_stash_file:
+        ensure => 'absent',
+      }
     }
   }
 }

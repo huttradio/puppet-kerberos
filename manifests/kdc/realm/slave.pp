@@ -53,6 +53,7 @@ define kerberos::kdc::realm::slave
 
   $manage_realm     = true,
   $domain           = undef,
+  $iprop_port       = $::kerberos::params::kdc_kpropd_iprop_port,
   $realm_parameters = {},
 
   $manage_kpropd_acl_realm       = true,
@@ -63,9 +64,11 @@ define kerberos::kdc::realm::slave
   {
     create_resources('::kerberos::kdc::realm', { $realm => merge(
     {
-      'ensure'   => $ensure,
-      'domain'   => $domain,
-      'password' => $password,
+      'ensure'       => $ensure,
+      'domain'       => $domain,
+      'password'     => $password,
+      'iprop_enable' => true,
+      'iprop_port'   => $iprop_port,
     }, $realm_parameters) })
   }
 
