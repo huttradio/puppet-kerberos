@@ -42,7 +42,7 @@
 #
 # Copyright 2016 Hutt Community Radio and Audio Archives Charitable Trust.
 #
-define kerberos::kdc::realm::db
+define kerberos::kdc::realm::dir
 (
   $realm  = $title,
 
