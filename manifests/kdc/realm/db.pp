@@ -111,8 +111,9 @@ define kerberos::kdc::realm::db
 
       if ($manage_dependencies)
       {
-        Class['::kerberos::kdc::conf']      -> Exec["kerberos::kdc::realm::db::${realm}"]
-        ::Kerberos::Kdc::Realm::Dir[$realm] -> Exec["kerberos::kdc::realm::db::${realm}"]
+        Class['::kerberos::kdc::conf']                    -> Exec["kerberos::kdc::realm::db::${realm}"]
+        ::Kerberos::Kdc::Realm::Dir[$realm]               -> Exec["kerberos::kdc::realm::db::${realm}"]
+        Exec["kerberos::kdc::realm::db::check::${realm}"] -> Class['::kerberos::kdc::service']
       }
     }
 
@@ -140,10 +141,16 @@ define kerberos::kdc::realm::db
 
       Exec["kerberos::kdc::realm::stash::${realm}"] -> Exec["kerberos::kdc::realm::stash::check::${realm}"] -> File[$_kdc_stash_file]
 
+      if ($manage_db)
+      {
+        Exec["kerberos::kdc::realm::db::check::${realm}"] -> Exec["kerberos::kdc::realm::stash::${realm}"]
+      }
+
       if ($manage_dependencies)
       {
-        Class['::kerberos::kdc::conf']      -> Exec["kerberos::kdc::realm::stash::${realm}"]
-        ::Kerberos::Kdc::Realm::Dir[$realm] -> Exec["kerberos::kdc::realm::stash::${realm}"]
+        Class['::kerberos::kdc::conf']                       -> Exec["kerberos::kdc::realm::stash::${realm}"]
+        ::Kerberos::Kdc::Realm::Dir[$realm]                  -> Exec["kerberos::kdc::realm::stash::${realm}"]
+        Exec["kerberos::kdc::realm::stash::check::${realm}"] -> Class['::kerberos::kdc::service']
       }
     }
   }
