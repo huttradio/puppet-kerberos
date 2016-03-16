@@ -28,9 +28,9 @@
 <% if @default_tkt_enctypes -%>
 	default_tkt_enctypes = <%= Array(@default_tkt_enctypes).join(",") %>
 <% end -%>
-	<% if @dns_canonicalize_hostname -%>
+<% if @dns_canonicalize_hostname -%>
 	dns_canonicalize_hostname = <%= @dns_canonicalize_hostname %>
-	<% end -%>
+<% end -%>
 <% if @dns_lookup_dc -%>
 	dns_lookup_dc = <%= @dns_lookup_dc %>
 <% end -%>
