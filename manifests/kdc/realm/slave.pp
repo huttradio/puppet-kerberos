@@ -82,9 +82,9 @@ define kerberos::kdc::realm::slave
     }
   }
 
-  if ($manage_kpropd_bootstrap)
+  if ($manage_kpropd_bootstrap_realm)
   {
-    ::kerberos::kdc::conf::bootstrap::realm
+    ::kerberos::kdc::kpropd::bootstrap::realm
     { $realm:
       ensure              => $ensure,
       slave               => $slave,
