@@ -67,7 +67,7 @@ define kerberos::kdc::realm::master
   $kdc_kadmin_server_acl_file = $::site::params::kdc_kadmin_server_acl_file,
 )
 {
-  $_host_principal   = pick($host_principal, "kiprop/${master}@${realm}")
+  $_host_principal   = pick($host_principal, "host/${master}@${realm}")
   $_kiprop_principal = pick($kiprop_principal, "kiprop/${master}@${realm}")
 
   if ($manage_realm)
