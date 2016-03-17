@@ -70,7 +70,7 @@ define kerberos::kdc::kpropd::bootstrap::realm
   $_slave_kiprop_principal  = pick($slave_kiprop_principal, "kiprop/${slave}@${realm}")
   $_master_kiprop_principal = pick($master_kiprop_principal, "kiprop/${master}@${realm}")
 
-  $command   = "'${kdc_kpropd_bootstrap_file}' '${ensure}' '${realm}' '${slave}' '${master}' '${_slave_host_principal}' '${_master_host_principal}' '${_slave_kiprop_principal}' '${_master_kiprop_principal}'",
+  $command   = "'${kdc_kpropd_bootstrap_file}' '${ensure}' '${realm}' '${slave}' '${master}' '${_slave_host_principal}' '${_master_host_principal}' '${_slave_kiprop_principal}' '${_master_kiprop_principal}'"
   $condition = "${echo} 'list' | ${ktutil} | ${grep} '${_slave_host_principal}' && ${echo} 'list' | ${ktutil} | ${grep} '${_slave_kiprop_principal}'"
 
   if ($ensure == 'present')

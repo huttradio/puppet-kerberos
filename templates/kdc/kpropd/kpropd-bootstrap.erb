@@ -9,6 +9,8 @@ kdc_keytab_file='<%= @kdc_keytab_file %>'
 kdc_database_dir='<%= @kdc_database_dir %>'
 kdc_database_dump_name='<%= @kdc_database_dump_name %>'
 
+ssh_options='-oStrictHostKeyChecking=no -oPubkeyAuthentication=yes -oPasswordAuthentication=no'
+
 ########################
 
 ensure=$1
@@ -30,37 +32,37 @@ kdc_database_dump_file="${kdc_database_dir}/${realm}/${kdc_database_dump_name}"
 if [ "${ensure}" = 'present' ]
 then
   # Create the host principal for the slave KDC in the master KDC's Kerberos database.
-  ssh "${master}" "kadmin.local -r ${realm} -q 'add_principal -randkey ${slave_host_principal}'" || exit $?
-  ssh "${master}" "kadmin.local -r ${realm} -q 'add_principal -randkey ${slave_kiprop_principal}'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'add_principal -randkey ${slave_host_principal}'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'add_principal -randkey ${slave_kiprop_principal}'" || exit $?
 
   # Add the slave KDC to the master KDC's keytab.
-  ssh "${master}" "kadmin.local -r ${realm} -q 'ktadd ${slave_host_principal}'" || exit $?
-  ssh "${master}" "kadmin.local -r ${realm} -q 'ktadd ${slave_kiprop_principal}'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd ${slave_host_principal}'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd ${slave_kiprop_principal}'" || exit $?
 
   # Create the keytab file for the slave KDC to authenticate with.
-  ssh "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${slave_host_principal}'" || exit $?
-  ssh "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${master_host_principal}'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${slave_host_principal}'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${master_host_principal}'" || exit $?
 
-  ssh "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${slave_kiprop_principal}'" || exit $?
-  ssh "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${master_kiprop_principal}'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${slave_kiprop_principal}'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${master_kiprop_principal}'" || exit $?
 
   # Copy the slave KDC's keytab from the master to the slave.
-  scp "${master}:${kdc_slave_keytab_file}" "${kdc_keytab_file}" || exit $?
-  ssh "${master}" "rm -f '${kdc_slave_keytab_file}'" || exit $?
+  scp $ssh_options "${master}:${kdc_slave_keytab_file}" "${kdc_keytab_file}" || exit $?
+  ssh $ssh_options "${master}" "rm -f '${kdc_slave_keytab_file}'" || exit $?
 
   # Do the initial Kerberos database sync from the master to the slave.
   # After this initial synchronisation, kpropd will use incremental propagation
   # to keep the slave KDC up to date.
-  ssh "${master}" "kdb5_util -r ${realm} dump '${kdc_database_dump_file}'" || exit $?
-  ssh "${master}" "kprop -f '${kdc_database_dump_file}' '${slave}'" || exit $?
-  ssh "${master}" "rm -f '${kdc_database_dump_file}'" || exit $?
+  ssh $ssh_options "${master}" "kdb5_util -r ${realm} dump '${kdc_database_dump_file}'" || exit $?
+  ssh $ssh_options "${master}" "kprop -f '${kdc_database_dump_file}' '${slave}'" || exit $?
+  ssh $ssh_options "${master}" "rm -f '${kdc_database_dump_file}'" || exit $?
 elif [ "${ensure}" = 'absent' ]
 then
   # Remove the slave KDC from the master KDC's keytab.
-  ssh "${master}" "kadmin.local -r ${realm} -q 'ktremove ${slave_host_principal} all'" || exit $?
-  ssh "${master}" "kadmin.local -r ${realm} -q 'ktremove ${slave_kiprop_principal} all'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktremove ${slave_host_principal} all'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktremove ${slave_kiprop_principal} all'" || exit $?
 
   # Remove the host principal for the slave KDC in the master KDC's Kerberos database.
-  ssh "${master}" "kadmin.local -r ${realm} -q 'delete_principal -force ${slave_host_principal}'" || exit $?
-  ssh "${master}" "kadmin.local -r ${realm} -q 'delete_principal -force ${slave_kiprop_principal}'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'delete_principal -force ${slave_host_principal}'" || exit $?
+  ssh $ssh_options "${master}" "kadmin.local -r ${realm} -q 'delete_principal -force ${slave_kiprop_principal}'" || exit $?
 fi
