@@ -58,6 +58,7 @@ define kerberos::kdc::realm::slave
 
   $manage_kpropd_acl_realm       = true,
   $manage_kpropd_bootstrap_realm = true,
+  $manage_dependencies           = true,
 )
 {
   if ($manage_realm)
@@ -85,9 +86,10 @@ define kerberos::kdc::realm::slave
   {
     ::kerberos::kdc::conf::bootstrap::realm
     { $realm:
-      ensure => $ensure,
-      slave  => $slave,
-      master => $master,
+      ensure              => $ensure,
+      slave               => $slave,
+      master              => $master,
+      manage_dependencies => $manage_dependencies,
     }
   }
 }

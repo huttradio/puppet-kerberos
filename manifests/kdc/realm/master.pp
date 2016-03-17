@@ -45,7 +45,7 @@
 define kerberos::kdc::realm::master
 (
   $password,
-  $realm  = $title,
+  $realm  = $name,
   $master = $::fqdn,
 
   $ensure = 'present',
@@ -54,6 +54,9 @@ define kerberos::kdc::realm::master
   $domain           = undef,
   $iprop_port       = $::kerberos::params::kdc_kpropd_iprop_port,
   $realm_parameters = {},
+
+  $manage_host_principal = true,
+  $host_principal        = undef,
 
   $manage_kiprop_principal = true,
   $kiprop_principal        = undef,
@@ -64,6 +67,7 @@ define kerberos::kdc::realm::master
   $kdc_kadmin_server_acl_file = $::site::params::kdc_kadmin_server_acl_file,
 )
 {
+  $_host_principal   = pick($host_principal, "kiprop/${master}@${realm}")
   $_kiprop_principal = pick($kiprop_principal, "kiprop/${master}@${realm}")
 
   if ($manage_realm)
@@ -78,11 +82,19 @@ define kerberos::kdc::realm::master
     }, $realm_parameters) })
   }
 
+  if ($manage_host_principal)
+  {
+    ::kerberos::kdc::principal
+    { $_host_principal:
+      ensure => $ensure,
+    }
+  }
+
   if ($manage_kiprop_principal)
   {
     ::kerberos::kdc::principal
     { $_kiprop_principal:
-      ensure      => $ensure,
+      ensure => $ensure,
     }
   }
 

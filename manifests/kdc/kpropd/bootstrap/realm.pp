@@ -46,18 +46,51 @@ define kerberos::kdc::kpropd::bootstrap::realm
 (
   $master,
   $slave = $::fqdn,
+  $realm = $name,
 
-  $ensure = 'present',
-  $realm  = $title,
+  $ensure              = 'present',
+  $manage_dependencies = true,
 
-  $bootstrap = $::kerberos::kdc::kpropd::acl::bootstrap::file,
+  $slave_host_principal  = undef,
+  $master_host_principal = undef,
+
+  $slave_kiprop_principal  = undef,
+  $master_kiprop_principal = undef,
+
+  $kdc_kpropd_bootstrap_file = $::kerberos::kdc::kpropd::bootstrap::file,
+
+  $echo   = $::kerberos::params::echo,
+  $grep   = $::kerberos::params::grep,
+  $ktutil = $::kerberos::params::ktutil,
 )
 {
-  exec
-  { "kerberos::kdc::kpropd::acl::bootstrap::realm::${realm}":
-    command     => "'${bootstrap}' '${ensure}' '${realm}' '${slave}' '${master}'",
-    refreshonly => true,
+  $_slave_host_principal  = pick($slave_host_principal, "host/${slave}@${realm}")
+  $_master_host_principal = pick($master_host_principal, "host/${master}@${realm}")
+
+  $_slave_kiprop_principal  = pick($slave_kiprop_principal, "kiprop/${slave}@${realm}")
+  $_master_kiprop_principal = pick($master_kiprop_principal, "kiprop/${master}@${realm}")
+
+  $command   = "'${kdc_kpropd_bootstrap_file}' '${ensure}' '${realm}' '${slave}' '${master}' '${_slave_host_principal}' '${_master_host_principal}' '${_slave_kiprop_principal}' '${_master_kiprop_principal}'",
+  $condition = "${echo} 'list' | ${ktutil} | ${grep} '${_slave_host_principal}' && ${echo} 'list' | ${ktutil} | ${grep} '${_slave_kiprop_principal}'"
+
+  if ($ensure == 'present')
+  {
+    $unless = $condition
+  }
+  elsif ($ensure == 'absent')
+  {
+    $onlyif = $condition
   }
 
-  Class['::kerberos::kdc::kpropd::bootstrap'] -> Exec["kerberos::kdc::kpropd::acl::bootstrap::realm::${realm}"]
+  exec
+  { "kerberos::kdc::kpropd::bootstrap::realm::${realm}":
+    command => $command,
+    onlyif  => $onlyif,
+    unless  => $unless,
+  }
+
+  if ($manage_dependencies)
+  {
+    Class['::kerberos::kdc::kpropd::bootstrap'] -> Exec["kerberos::kdc::kpropd::bootstrap::realm::${realm}"]
+  }
 }
