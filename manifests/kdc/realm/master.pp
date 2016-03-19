@@ -76,6 +76,7 @@ define kerberos::kdc::realm::master
     {
       'ensure'       => $ensure,
       'domain'       => $domain,
+      'admin_server' => 'localhost',
       'password'     => $password,
       'iprop_enable' => true,
       'iprop_port'   => $iprop_port,

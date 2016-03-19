@@ -45,21 +45,18 @@
 define kerberos::kdc::realm
 (
   $password,
-  $realm = $title,
+  $realm = $name,
 
   $ensure = 'present',
 
-  $slaves = undef,
-  $master = undef,
-
-  $iprop_enable = undef,
-  $iprop_port   = undef,
-
   $manage_client_realm     = true,
   $domain                  = undef,
+  $admin_server            = undef,
   $client_realm_parameters = {},
 
   $manage_kdc_conf_realm     = true,
+  $iprop_enable              = undef,
+  $iprop_port                = undef,
   $kdc_conf_realm_parameters = {},
 
   $manage_kdc_realm_dir = true,
@@ -73,8 +70,10 @@ define kerberos::kdc::realm
   {
     create_resources('::kerberos::client::realm', { $realm => merge(
     {
-      'ensure' => $ensure,
-      'domain' => $domain,
+      'ensure'       => $ensure,
+      'domain'       => $domain,
+      'kdc'          => 'localhost',
+      'admin_server' => $admin_server,
     }, $client_realm_parameters) })
   }
 

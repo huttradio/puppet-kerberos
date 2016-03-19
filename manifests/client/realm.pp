@@ -44,6 +44,9 @@
 #
 define kerberos::client::realm
 (
+  $kdc,
+  $admin_server = undef,
+
   $ensure = 'present',
 
   $manage_conf_realm                = true,
