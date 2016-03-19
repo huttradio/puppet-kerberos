@@ -60,7 +60,9 @@ define kerberos::client::realm
   {
     ::kerberos::client::conf::realms::realm
     { $realm:
-      ensure => $ensure,
+      ensure       => $ensure,
+      kdc          => $kdc,
+      admin_server => $admin_server,
     }
   }
 
