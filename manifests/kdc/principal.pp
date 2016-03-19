@@ -48,6 +48,8 @@ define kerberos::kdc::principal
   $realm     = regsubst($title, '^(.*)@(.*)$', '\2'),
 
   $ensure              = 'present',
+  $manage_principal    = true,
+  $manage_keytab       = false,
   $manage_dependencies = true,
 
   # For details on options see this:
@@ -56,32 +58,73 @@ define kerberos::kdc::principal
   $password = undef,
   $options  = {},
 
+  $kdc_keytab_file = $::kerberos::params::kdc_keytab_file,
+
   $grep         = $::kerberos::params::grep,
   $kadmin_local = $::kerberos::params::kadmin_local,
+  $klist        = $::kerberos::params::klist,
 )
 {
   if ($ensure == 'present')
   {
     $_options = kerberos_kdc_principal_options_encode($randkey, $pw, $options)
 
-    exec
-    { "::kerberos::kdc::principal::${principal}":
-      command => "${kadmin_local} -r ${realm} -q \"add_principal ${_options} ${principal}\"",
-      unless  => "${kadmin_local} -r ${realm} -q \"list_principals ${principal}\" | ${grep} \"${principal}\"",
+    if ($manage_principal)
+    {
+      exec
+      { "::kerberos::kdc::principal::principal::${principal}":
+        command => "${kadmin_local} -r ${realm} -q 'add_principal ${_options} ${principal}'",
+        unless  => "${kadmin_local} -r ${realm} -q 'list_principals ${principal}' | ${grep} '${principal}'",
+      }
+    }
+
+    if ($manage_keytab)
+    {
+      exec
+      { "::kerberos::kdc::principal::keytab::${principal}":
+        command => "${kadmin_local} -r ${realm} -q 'ktadd -k ${kdc_keytab_file} ${principal}'",
+        unless  => "${klist} -ke '${kdc_keytab_file}' | ${grep} '${principal}'",
+      }
+
+      if ($manage_principal)
+      {
+        Exec["::kerberos::kdc::principal::principal::${principal}"] -> Exec["::kerberos::kdc::principal::keytab::${principal}"]
+      }
     }
   }
   elsif ($ensure == 'absent')
   {
-    exec
-    { "::kerberos::kdc::principal::${principal}":
-      command => "${kadmin_local} -r ${realm} -q \"delete_principal -force ${principal}\"",
-      onlyif  => "${kadmin_local} -r ${realm} -q \"list_principals ${principal}\" | ${grep} \"${principal}\"",
+    if ($manage_principal)
+    {
+      exec
+      { "::kerberos::kdc::principal::principal::${principal}":
+        command => "${kadmin_local} -r ${realm} -q 'delete_principal -force ${principal}'",
+        onlyif  => "${kadmin_local} -r ${realm} -q 'list_principals ${principal}' | ${grep} '${principal}'",
+      }
+    }
+
+    if ($manage_keytab)
+    {
+      exec
+      { "::kerberos::kdc::principal::keytab::${principal}":
+        command => "${kadmin_local} -r ${realm} -q 'ktremove -k ${kdc_keytab_file} ${principal} all'",
+        onlyif  => "${klist} -ke '${kdc_keytab_file}' | ${grep} '${principal}'",
+      }
     }
   }
 
   if ($manage_dependencies)
   {
-    ::Kerberos::Kdc::Realm[$realm]                   -> Exec["::kerberos::kdc::principal::${principal}"]
-    Class['::kerberos::kdc::kadmin_server::service'] -> Exec["::kerberos::kdc::principal::${principal}"]
+    if ($manage_principal)
+    {
+      ::Kerberos::Kdc::Realm[$realm]                   -> Exec["::kerberos::kdc::principal::principal::${principal}"]
+      Class['::kerberos::kdc::kadmin_server::service'] -> Exec["::kerberos::kdc::principal::principal::${principal}"]
+    }
+
+    if ($manage_keytab)
+    {
+      ::Kerberos::Kdc::Realm[$realm]                   -> Exec["::kerberos::kdc::principal::keytab::${principal}"]
+      Class['::kerberos::kdc::kadmin_server::service'] -> Exec["::kerberos::kdc::principal::keytab::${principal}"]
+    }
   }
 }

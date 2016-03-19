@@ -25,7 +25,6 @@ master_ssh_key=$9
 
 ########################
 
-kdc_slave_keytab_file="${kdc_keytab_file}.${realm}.${slave}"
 kdc_database_dump_file="${kdc_database_dir}/${realm}/${kdc_database_dump_name}"
 
 [ -n "${master_ssh_key}" ] && ssh_identity="-i ${master_ssh_key}"
@@ -38,20 +37,12 @@ then
   ssh $ssh_identity $ssh_options "${master}" "kadmin.local -r ${realm} -q 'add_principal -randkey ${slave_host_principal}'" || exit $?
   ssh $ssh_identity $ssh_options "${master}" "kadmin.local -r ${realm} -q 'add_principal -randkey ${slave_kiprop_principal}'" || exit $?
 
-  # Add the slave KDC to the master KDC's keytab.
-  ssh $ssh_identity $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd ${slave_host_principal}'" || exit $?
-  ssh $ssh_identity $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd ${slave_kiprop_principal}'" || exit $?
+  # Add the keytab entries for the slave entry host and kiprop principals.
+  ssh $ssh_identity $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_keytab_file} ${slave_host_principal}'" || exit $?
+  ssh $ssh_identity $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_keytab_file} ${slave_kiprop_principal}'" || exit $?
 
-  # Create the keytab file for the slave KDC to authenticate with.
-  ssh $ssh_identity $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${slave_host_principal}'" || exit $?
-  ssh $ssh_identity $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${master_host_principal}'" || exit $?
-
-  ssh $ssh_identity $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${slave_kiprop_principal}'" || exit $?
-  ssh $ssh_identity $ssh_options "${master}" "kadmin.local -r ${realm} -q 'ktadd -k ${kdc_slave_keytab_file} ${master_kiprop_principal}'" || exit $?
-
-  # Copy the slave KDC's keytab from the master to the slave.
-  scp $ssh_identity $ssh_options "${master}:${kdc_slave_keytab_file}" "${kdc_keytab_file}" || exit $?
-  ssh $ssh_identity $ssh_options "${master}" "rm -f '${kdc_slave_keytab_file}'" || exit $?
+  # Copy the keytab from the master to the slave.
+  scp $ssh_identity $ssh_options "${master}:${kdc_keytab_file}" "${kdc_keytab_file}" || exit $?
 
   # Do the initial Kerberos database sync from the master to the slave.
   # After this initial synchronisation, kpropd will use incremental propagation
