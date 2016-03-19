@@ -47,7 +47,7 @@ define kerberos::kdc::realm::slave
   $master,
   $password,
   $slave = $::fqdn,
-  $realm = $title,
+  $realm = $name,
 
   $ensure = 'present',
 
@@ -57,8 +57,11 @@ define kerberos::kdc::realm::slave
   $realm_parameters = {},
 
   $manage_kpropd_acl_realm       = true,
+
   $manage_kpropd_bootstrap_realm = true,
-  $manage_dependencies           = true,
+  $master_ssh_key                = undef,
+
+  $manage_dependencies = true,
 )
 {
   if ($manage_realm)
@@ -87,8 +90,9 @@ define kerberos::kdc::realm::slave
     ::kerberos::kdc::kpropd::bootstrap::realm
     { $realm:
       ensure              => $ensure,
-      slave               => $slave,
       master              => $master,
+      master_ssh_key      => $master_ssh_key,
+      slave               => $slave,
       manage_dependencies => $manage_dependencies,
     }
   }

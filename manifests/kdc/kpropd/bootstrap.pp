@@ -60,7 +60,7 @@ class kerberos::kdc::kpropd::bootstrap
   file
   { $file:
     ensure  => $ensure,
-    content => template('kerberos/kdc/kpropd/kpropd-bootstrap.erb'),
+    content => template('kerberos/kdc/kpropd/bootstrap/kpropd-bootstrap.erb'),
     owner   => $owner,
     group   => $group,
     mode    => $mode,
