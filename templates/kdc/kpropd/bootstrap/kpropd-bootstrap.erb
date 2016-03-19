@@ -28,7 +28,7 @@ master_ssh_key=$9
 kdc_slave_keytab_file="${kdc_keytab_file}.${realm}.${slave}"
 kdc_database_dump_file="${kdc_database_dir}/${realm}/${kdc_database_dump_name}"
 
-[ -n "${master_ssh_key}" ] && ssh_identity="-i '${master_ssh_key}'"
+[ -n "${master_ssh_key}" ] && ssh_identity="-i ${master_ssh_key}"
 
 ########################
 
