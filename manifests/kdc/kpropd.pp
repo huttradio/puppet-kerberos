@@ -74,8 +74,7 @@ class kerberos::kdc::kpropd
   {
     class
     { '::kerberos::kdc::kpropd::bootstrap':
-      ensure              => $ensure,
-      manage_dependencies => $manage_dependencies,
+      ensure => $ensure,
     }
   }
 }

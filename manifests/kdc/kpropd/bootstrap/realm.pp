@@ -92,6 +92,9 @@ define kerberos::kdc::kpropd::bootstrap::realm
 
   if ($manage_dependencies)
   {
+    Class['::kerberos::kdc::conf']              -> Exec["kerberos::kdc::kpropd::bootstrap::realm::${realm}"]
+    Class['::kerberos::client::conf']           -> Exec["kerberos::kdc::kpropd::bootstrap::realm::${realm}"]
+    Class['::kerberos::kdc::kpropd::service']   -> Exec["kerberos::kdc::kpropd::bootstrap::realm::${realm}"]
     Class['::kerberos::kdc::kpropd::bootstrap'] -> Exec["kerberos::kdc::kpropd::bootstrap::realm::${realm}"]
   }
 }

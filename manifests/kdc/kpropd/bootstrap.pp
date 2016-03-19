@@ -45,7 +45,6 @@
 class kerberos::kdc::kpropd::bootstrap
 (
   $ensure              = 'present',
-  $manage_dependencies = true,
 
   $file  = $::kerberos::params::kdc_kpropd_bootstrap_file,
   $owner = $::kerberos::params::kdc_kpropd_bootstrap_owner,
@@ -64,10 +63,5 @@ class kerberos::kdc::kpropd::bootstrap
     owner   => $owner,
     group   => $group,
     mode    => $mode,
-  }
-
-  if ($manage_dependencies)
-  {
-    Class['::kerberos::kdc::kpropd::service'] -> File[$file]
   }
 }
