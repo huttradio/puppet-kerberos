@@ -87,7 +87,8 @@ define kerberos::kdc::realm::master
   {
     ::kerberos::kdc::principal
     { $_host_principal:
-      ensure => $ensure,
+      ensure        => $ensure,
+      manage_keytab => true,
     }
   }
 
@@ -95,7 +96,8 @@ define kerberos::kdc::realm::master
   {
     ::kerberos::kdc::principal
     { $_kiprop_principal:
-      ensure => $ensure,
+      ensure        => $ensure,
+      manage_keytab => true,
     }
   }
 
