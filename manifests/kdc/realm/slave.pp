@@ -70,6 +70,7 @@ define kerberos::kdc::realm::slave
     {
       'ensure'       => $ensure,
       'domain'       => $domain,
+      'kdc'          => ['localhost', $master],
       'admin_server' => $master,
       'password'     => $password,
       'iprop_enable' => true,

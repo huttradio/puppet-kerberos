@@ -48,6 +48,8 @@ then
   # After this initial synchronisation, kpropd will use incremental propagation
   # to keep the slave KDC up to date.
   ssh $ssh_identity $ssh_options "${master}" "kdb5_util -r ${realm} dump '${kdc_database_dump_file}'" || exit $?
+  # Generate temporary krb5_config featuring localhost and ${slave} as KDCs
+  # KRB5_CONFIG='${krb5_config_temp}' kprop -f '${kdc_database_dump_file}' '${slave}'
   ssh $ssh_identity $ssh_options "${master}" "kprop -f '${kdc_database_dump_file}' '${slave}'" || exit $?
   ssh $ssh_identity $ssh_options "${master}" "rm -f '${kdc_database_dump_file}'" || exit $?
 elif [ "${ensure}" = 'absent' ]
