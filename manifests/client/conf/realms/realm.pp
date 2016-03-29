@@ -64,12 +64,6 @@ define kerberos::client::conf::realms::realm
   $client_conf_file = $::kerberos::client::conf::file,
 )
 {
-  # Validate parameters.
-  if ($kdc_dns_srv == false)
-  {
-    validate_string($kdc)
-  }
-
   if ($ensure == 'present')
   {
     # Include section class.

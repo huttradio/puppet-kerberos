@@ -51,6 +51,7 @@ define kerberos::kdc::realm
 
   $manage_client_realm     = true,
   $domain                  = undef,
+  $kdc                     = 'localhost',
   $admin_server            = undef,
   $client_realm_parameters = {},
 
@@ -72,7 +73,7 @@ define kerberos::kdc::realm
     {
       'ensure'       => $ensure,
       'domain'       => $domain,
-      'kdc'          => 'localhost',
+      'kdc'          => $kdc,
       'admin_server' => $admin_server,
     }, $client_realm_parameters) })
   }
